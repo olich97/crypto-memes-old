@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ['localhost', 'host.docker.internal']
+    domains: ['localhost', 'host.docker.internal'],
   },
   env: {
     MEMES_ENDPOINT: process.env.MEMES_ENDPOINT,

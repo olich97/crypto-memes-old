@@ -15,6 +15,7 @@ A Next.js site. Built with:
 
 1. Create a `.env` file from `.example-env`
 2. Install dependencies
+
 ```bash
 yarn install
 # or

@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        '128': '32rem',
+        128: '32rem',
       },
       typography: theme => ({
         DEFAULT: {
@@ -83,7 +83,7 @@ module.exports = {
         fuchsia: colors.fuchsia,
         pink: colors.pink,
         cyan: colors.cyan,
-  
+
         // NEW UI COLORS
         'CD-blue': '#2357DE',
         'CD-blue-accent': '#4770FF',
@@ -95,8 +95,8 @@ module.exports = {
         'CD-gray': '#3E3E3E',
         'CD-gray-accent': '#353535',
         'CD-red-accent': '#FF745F',
-        'CD-yellow-accent': '#FFC167'
-    },
+        'CD-yellow-accent': '#FFC167',
+      },
     },
   },
   variants: {
