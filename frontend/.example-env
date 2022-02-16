@@ -1,0 +1,6 @@
+# Meme api
+MEMES_ENDPOINT=http://localhost:3500/memes
+# Authentication api
+OAUTH_ENDPOINT=http://localhost:3500/oauth
+# Current site base url
+HOST_URL=http://localhost:3000

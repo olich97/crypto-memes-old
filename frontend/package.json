@@ -1,0 +1,71 @@
+{
+  "name": "crypto-memes",
+  "author": "Oleh Andrushko",
+  "license": "MIT",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "test": "jest",
+    "test-all": "npm run lint && npm run type-check && npm run test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "npm run lint",
+      "npm run format"
+    ]
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@tailwindcss/typography": "^0.4.1",
+    "@tailwindui/react": "^0.1.1",
+    "date-fns": "^2.19.0",
+    "dotenv": "^10.0.0",
+    "gray-matter": "^4.0.2",
+    "mdx-prism": "^0.3.3",
+    "next": "^11.0.1",
+    "next-mdx-remote": "^3.0.2",
+    "next-themes": "^0.0.15",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rehype-autolink-headings": "^5.0.1",
+    "rehype-slug": "^4.0.1",
+    "remark-code-titles": "^0.1.1",
+    "swr": "^1.0.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^11.2.5",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^14.14.25",
+    "@types/react": "^17.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.14.2",
+    "@typescript-eslint/parser": "^4.14.2",
+    "autoprefixer": "^10.2.6",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.19.0",
+    "eslint-config-next": "^11.0.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-watch-typeahead": "^0.6.1",
+    "lint-staged": "^10.0.10",
+    "postcss": "^8.3.5",
+    "prettier": "^2.4.1",
+    "rehype": "^11.0.0",
+    "tailwindcss": "^2.2.19",
+    "typescript": "^4.3.4"
+  }
+}
