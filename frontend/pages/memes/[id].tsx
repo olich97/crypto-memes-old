@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '../../components/Layout';
 import Loader from '../../components/Loader';
 import { getMeme } from '../../lib/memeService';
-import { MetaProps } from '../../types/layout';
+import { MetaProps } from '../../lib/types/layout';
 import Image from 'next/image';
 export function getServerSideProps(context: any) {
   return {

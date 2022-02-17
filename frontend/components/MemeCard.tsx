@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { MemeType } from '../types/meme';
+import { MemeType } from '../lib/types/meme';
 import Image from 'next/image';
 
 const MemeCard = ({ meme }: { meme?: MemeType }): JSX.Element => {

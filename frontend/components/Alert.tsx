@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTypes } from '../types/alert';
+import { AlertTypes } from '../lib/types/alert';
 
 type AlertProps = {
   type: AlertTypes;

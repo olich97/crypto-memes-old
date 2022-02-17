@@ -2,7 +2,7 @@ import NextHead from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import config from '../lib/config';
-import { MetaProps } from '../types/layout';
+import { MetaProps } from '../lib/types/layout';
 
 const siteTitle = 'Crypto Memes - Fun for Dev';
 const Head = ({ customMeta }: { customMeta?: MetaProps }): JSX.Element => {

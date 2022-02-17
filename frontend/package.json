@@ -29,8 +29,10 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@tailwindcss/typography": "^0.4.1",
     "@tailwindui/react": "^0.1.1",
+    "@walletconnect/web3-provider": "^1.7.1",
     "date-fns": "^2.19.0",
     "dotenv": "^10.0.0",
+    "ethers": "^5.5.4",
     "gray-matter": "^4.0.2",
     "mdx-prism": "^0.3.3",
     "next": "^11.0.1",
@@ -41,7 +43,10 @@
     "rehype-autolink-headings": "^5.0.1",
     "rehype-slug": "^4.0.1",
     "remark-code-titles": "^0.1.1",
-    "swr": "^1.0.1"
+    "swr": "^1.0.1",
+    "walletconnect": "^1.7.1",
+    "walletlink": "^2.4.7",
+    "web3modal": "^1.9.5"
   },
   "devDependencies": {
     "@testing-library/react": "^11.2.5",

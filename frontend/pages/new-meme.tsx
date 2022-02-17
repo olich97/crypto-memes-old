@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { postMeme } from '../lib/memeService';
 import Loader from '../components/Loader';
 import Alert from '../components/Alert';
-import { AlertTypes } from '../types/alert';
+import { AlertTypes } from '../lib/types/alert';
 
 export const NewMeme = (): JSX.Element => {
   const [selectedImage, setSelectedImage] = useState();
@@ -23,8 +23,8 @@ export const NewMeme = (): JSX.Element => {
     if (memeText == '' || !selectedImage) {
       setUploadResult({
         isError: true,
-        message: 'Campi invalidi!',
-        description: 'Testo o il contenuto risultano vuoti!',
+        message: 'Invalid data!',
+        description: 'Text and image fields should not be empty...',
       });
       setShowAlert(true);
       return;

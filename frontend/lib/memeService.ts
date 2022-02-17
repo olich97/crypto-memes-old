@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { MemeType } from '../types/meme';
+import { MemeType } from './types/meme';
 import config from './config';
 
 export type MemeOutput = {
