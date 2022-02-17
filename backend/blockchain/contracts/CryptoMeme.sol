@@ -22,11 +22,11 @@ contract CryptoMeme is ERC1155, Ownable {
     Counters.Counter private _memeIds;
 
     // ID for fungible token used as coins on the platform
-    // MemeCoin (MTC) token amount will be rappresented with two decimals,
+    // CryptoMeme Coin (CMC) token amount will be rappresented with two decimals,
     // means need to divide the token amount by 100 to get its user representation
     uint256 public constant MEME_COIN = 0;
 
-    // reward for creating a new meme in MemeCoin token (MTC)
+    // reward for creating a new meme in CryptoMeme Coin token (CMC)
     uint256 public MEME_CREATION_REWARD = 100; // 1.00 MTC = 0.01 Eth
 
     // max memes hosted by the platfrom, just in case to be sure
@@ -55,7 +55,7 @@ contract CryptoMeme is ERC1155, Ownable {
     struct MemeInfo {
         address owner;
         uint256 createdAt;   // unix timestamp then meme was minted
-        uint256 price;      // in MTC
+        uint256 price;      // in CMC
         bool isForSale;
     }
  
@@ -69,6 +69,16 @@ contract CryptoMeme is ERC1155, Ownable {
     }
 
     constructor(string memory  _baseUri) ERC1155(_baseUri) {}
+    
+    /**
+     * @dev Sets base token uri
+     */
+    function setURI(string memory _newUri) 
+        public 
+        onlyOwner 
+    {
+        _setURI(_newUri);
+    }
 
     /****************************************|
     |       Memes Management                 |
@@ -125,6 +135,33 @@ contract CryptoMeme is ERC1155, Ownable {
     }
 
     /**
+     * @dev Set meme price
+     * @param memeId token id
+     */
+    function setMemePrice(uint256 memeId, uint256 price)
+        external
+    {
+        require(memes[memeId].owner != address(0), "Meme does not exists");
+        require(price > 0, "Starting price should be greater than 0");
+        require(memes[memeId].owner == msg.sender, "Caller is not an owner of the meme");
+
+        memes[memeId].price = price;
+    }
+
+     /**
+     * @dev Set/unset for sale
+     * @param memeId token id
+     */
+    function setMemeSale(uint256 memeId, bool isForSale)
+        external
+    {
+        require(memes[memeId].owner != address(0), "Meme does not exists");       
+        require(memes[memeId].owner == msg.sender, "Caller is not an owner of the meme");
+
+        memes[memeId].isForSale = isForSale;
+    }
+
+    /**
      * @dev Get all memes in the platform
      */
     function getMemes()
@@ -176,14 +213,15 @@ contract CryptoMeme is ERC1155, Ownable {
         _userEnabled[user] = false;
     }
 
-
-
-    /*
-    function needed:
-        - register() -> add new platform users (only users of the platform can perform operations)
-        - createMeme(string hash, uint price) -> mint new meme nft with tokenId = uint256(hash) and price in MTC
-        - purchaseMeme(uint256 id) -> transfer meme to msg.sender and pay memecoin (= memePrice) to memeOwner
-        - getMemes() -> retrive all memes with data like: owner, price (in MTC), id
-    */
-
+    /**
+     * @dev Returns user status
+     * @param user user address
+     */
+    function isUserEnabled(address user) 
+        external 
+        view
+        returns(bool) 
+    {
+        return _userEnabled[user];
+    }
 }
