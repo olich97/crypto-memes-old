@@ -10,7 +10,7 @@ export function getChainData(chainId?: number): IChainData {
   if (!chainData) {
     throw new Error('ChainId missing or not supported');
   }
-
+  /*
   const API_KEY = '460f40a260564ac4a4f4b3fffb032dad';
 
   if (chainData.rpc_url.includes('infura.io') && chainData.rpc_url.includes('%API_KEY%') && API_KEY) {
@@ -21,7 +21,7 @@ export function getChainData(chainId?: number): IChainData {
       rpc_url: rpcUrl,
     };
   }
-
+  */
   return chainData;
 }
 

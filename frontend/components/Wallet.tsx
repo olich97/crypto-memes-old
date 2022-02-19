@@ -195,7 +195,7 @@ const Wallet = (): JSX.Element => {
       };
     }
   }, [provider, disconnect]);
-
+  // TODO: Handle unsuported chain with message
   const chainData = getChainData(chainId);
 
   return (

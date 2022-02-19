@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { getMemes } from '../lib/memeService';
-import useDebounce from '../lib/hooks/useDebounce';
+import React, { useCallback, useEffect, useState } from 'react';
+import { getMemes } from '../lib/crypto-memes';
+//import useDebounce from '../lib/hooks/useDebounce';
+import { Result } from '../lib/types/result';
 import Loader from './Loader';
 import MemeCard from './MemeCard';
 
@@ -9,7 +10,10 @@ const MemeList = (): JSX.Element => {
   const [limit, setLimit] = useState(6);
   const [currentPage, setCurrentPage] = useState(0);
   const [search, setSearch] = useState('');
-  const debouncedValue = useDebounce(search, 500);
+  const [memes, setMemes] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [isError, setError] = useState(false);
+  //const debouncedValue = useDebounce(search, 500);
 
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -19,11 +23,22 @@ const MemeList = (): JSX.Element => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
   };
 
-  //console.log(`search: ${debouncedValue}, skip: ${skip}, limit: ${limit}`);
-  const { memes, isLoading, isError } = getMemes(limit, currentPage, debouncedValue);
+  const loadMemes = useCallback(async () => {
+    setLoading(true);
+    const response: Result = await getMemes();
+    setLoading(false);
+    setError(response.isError);
+    setMemes(response.data);
+  }, []);
+
+  useEffect(() => {
+    loadMemes();
+  }, [loadMemes]);
 
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <Loader />;
+
+  //console.log(`search: ${debouncedValue}, skip: ${skip}, limit: ${limit}`);
 
   return (
     <div>
