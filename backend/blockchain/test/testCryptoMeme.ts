@@ -34,7 +34,7 @@ describe('Crypt Meme Contract', function () {
     }); 
 
     describe('Minting', function () {
-        const memeHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("my beautiful meme content with text"))
+        const memeHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("When I try not to laugh at the meme my coworker sent over Slack in the all-hands meeting"))
         const memeId = ethers.BigNumber.from(memeHash);
 
         const memeHash2 = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("my beautiful meme content with text 2"))
@@ -53,6 +53,7 @@ describe('Crypt Meme Contract', function () {
         });
 
         it("should set reward", async function () {
+          console.log(memeId);
             const memeCoins = await memeContract.balanceOf(nftOwner1.address, 0);
             expect(memeCoins).to.equal(100);
         });
@@ -75,6 +76,13 @@ describe('Crypt Meme Contract', function () {
         it("should set owner", async function () {
             const meme = await memeContract.getMeme(memeId);
             expect(meme.owner).to.equal(nftOwner1.address);
+        });
+
+        it("should set list", async function () {
+          const memes = await memeContract.getMemes();
+          expect(memes[0].id).to.equal(memeId);
+          expect(memes[0].owner).to.equal(nftOwner1.address);
+          expect(memes[0].price).to.equal(10);
         });
 
         it("should fail if create with the same hash", async function () {      

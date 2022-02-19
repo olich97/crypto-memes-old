@@ -34,10 +34,14 @@ contract CryptoMeme is ERC1155, Ownable {
 
 
     /**
-     * @dev All memes on the platform
+     * @dev Mapping form memeIs to info
      */
-    mapping(uint256 => MemeInfo) public memes;
-    uint64 memesCount;
+    mapping(uint256 => MemeInfo) public memeInfos;
+
+    /**
+     * @dev List of memes in the platfrom
+     */
+    MemeInfo[] public memes;
 
     /**
      * @dev Users addresses enabled to operate in the platform
@@ -57,6 +61,7 @@ contract CryptoMeme is ERC1155, Ownable {
         uint256 createdAt;   // unix timestamp then meme was minted
         uint256 price;      // in CMC
         bool isForSale;
+        uint256 id;
     }
  
 
@@ -96,21 +101,23 @@ contract CryptoMeme is ERC1155, Ownable {
     {
         require(price > 0, "Starting price should be greater than 0");
         require(!_hashExists[_hash], "Meme was already created");
-        require(memesCount <= MAX_MEMES_SUPPLY, "Maximum meme supply reached");
+        require(memes.length <= MAX_MEMES_SUPPLY, "Maximum meme supply reached");
 
         uint256 memeId = uint256(_hash);
         _mint(msg.sender, memeId, 1, '');
         // save meme info
-        memes[memeId] = MemeInfo({
+        MemeInfo memory meme = MemeInfo({
+            id: memeId,
             owner: msg.sender,
             createdAt: block.timestamp,
             price: price,
             isForSale: isForSale
         });     
+        memeInfos[memeId] = meme;
+        memes.push(meme);
         // reward creator with Meme Coins        
         _mint(msg.sender, MEME_COIN, MEME_CREATION_REWARD, 'MEME_CREATION_REWARD');
 
-        memesCount++;
         _hashExists[_hash] = true;
     }
 
@@ -123,15 +130,15 @@ contract CryptoMeme is ERC1155, Ownable {
         payable
         onlyEnabledUser
     {
-        require(memes[memeId].owner != address(0), "Meme does not exists");
-        require(memes[memeId].owner != msg.sender, "Sender already owns current meme");
-        require(memes[memeId].isForSale, "Meme is NOT for sale");
-        require(balanceOf(msg.sender, MEME_COIN) >= memes[memeId].price, "Insufficient balance to buy meme");
-        require(msg.value == memes[memeId].price, "Incorrect meme price");
+        require(memeInfos[memeId].owner != address(0), "Meme does not exists");
+        require(memeInfos[memeId].owner != msg.sender, "Sender already owns current meme");
+        require(memeInfos[memeId].isForSale, "Meme is NOT for sale");
+        require(balanceOf(msg.sender, MEME_COIN) >= memeInfos[memeId].price, "Insufficient balance to buy meme");
+        require(msg.value == memeInfos[memeId].price, "Incorrect meme price");
         // transfer meme coins to the seller
-        _safeTransferFrom(msg.sender, memes[memeId].owner, MEME_COIN, msg.value, 'MTC_TRANSFER');
+        _safeTransferFrom(msg.sender, memeInfos[memeId].owner, MEME_COIN, msg.value, 'MTC_TRANSFER');
         // transfer meme nft to buyer
-        _safeTransferFrom(memes[memeId].owner, msg.sender, memeId, 1, 'MEME_TRANSFER');
+        _safeTransferFrom(memeInfos[memeId].owner, msg.sender, memeId, 1, 'MEME_TRANSFER');
     }
 
     /**
@@ -141,11 +148,11 @@ contract CryptoMeme is ERC1155, Ownable {
     function setMemePrice(uint256 memeId, uint256 price)
         external
     {
-        require(memes[memeId].owner != address(0), "Meme does not exists");
+        require(memeInfos[memeId].owner != address(0), "Meme does not exists");
         require(price > 0, "Starting price should be greater than 0");
-        require(memes[memeId].owner == msg.sender, "Caller is not an owner of the meme");
+        require(memeInfos[memeId].owner == msg.sender, "Caller is not an owner of the meme");
 
-        memes[memeId].price = price;
+        memeInfos[memeId].price = price;
     }
 
      /**
@@ -155,10 +162,10 @@ contract CryptoMeme is ERC1155, Ownable {
     function setMemeSale(uint256 memeId, bool isForSale)
         external
     {
-        require(memes[memeId].owner != address(0), "Meme does not exists");       
-        require(memes[memeId].owner == msg.sender, "Caller is not an owner of the meme");
+        require(memeInfos[memeId].owner != address(0), "Meme does not exists");       
+        require(memeInfos[memeId].owner == msg.sender, "Caller is not an owner of the meme");
 
-        memes[memeId].isForSale = isForSale;
+        memeInfos[memeId].isForSale = isForSale;
     }
 
     /**
@@ -168,12 +175,8 @@ contract CryptoMeme is ERC1155, Ownable {
         external
         view
         returns(MemeInfo[] memory)
-    {
-        MemeInfo[] memory result = new MemeInfo[](memesCount);
-        for(uint64 i=0; i < memesCount; i++) {
-           result[i] = memes[i];
-        }
-        return result;
+    {       
+        return memes;
     }
 
      /**
@@ -185,7 +188,7 @@ contract CryptoMeme is ERC1155, Ownable {
         view
         returns(MemeInfo memory)
     {
-        return memes[memeId];
+        return memeInfos[memeId];
     }
 
 
