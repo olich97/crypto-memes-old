@@ -59,6 +59,13 @@ export const About = (): JSX.Element => {
         <li>
           - Deploys on <a href="https://vercel.com/">Vercel</a>
         </li>
+        <li>
+          -{' '}
+          <a href="https://rinkeby.etherscan.io/address/0xD8e1BD9d67739F81f6dad5685692021815822849#code">
+            Smart Contract
+          </a>{' '}
+          deployed on Rinkeby testnet
+        </li>
       </ul>
       <br />
       <h2>That's it =)</h2>
