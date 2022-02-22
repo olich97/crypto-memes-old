@@ -35,7 +35,12 @@ const MemeList = (): JSX.Element => {
     loadMemes();
   }, [loadMemes]);
 
-  if (isError) return <div>failed to load</div>;
+  if (isError)
+    return (
+      <div>
+        failed to load <p>Please, check your wallet connection :)</p>
+      </div>
+    );
   if (isLoading) return <Loader />;
 
   // Simple Searching and pagination
