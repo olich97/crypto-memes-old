@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
   const cryptoMeme = await ethers.getContractFactory("CryptoMeme");
-  const meme = await cryptoMeme.deploy("");
+  const meme = await cryptoMeme.deploy("https://neccieywpfixdlszropx.supabase.in/storage/v1/object/public/metadata/{id}.json");
 
   await meme.deployed();
 
