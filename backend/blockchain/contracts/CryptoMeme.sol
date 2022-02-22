@@ -139,6 +139,7 @@ contract CryptoMeme is ERC1155, Ownable {
         _safeTransferFrom(msg.sender, memeInfos[memeId].owner, MEME_COIN, msg.value, 'MTC_TRANSFER');
         // transfer meme nft to buyer
         _safeTransferFrom(memeInfos[memeId].owner, msg.sender, memeId, 1, 'MEME_TRANSFER');
+        memeInfos[memeId].owner = msg.sender;
     }
 
     /**

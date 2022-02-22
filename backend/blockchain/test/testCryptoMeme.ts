@@ -150,6 +150,9 @@ describe('Crypt Meme Contract', function () {
 
           expect(await memeContract.balanceOf(nftOwner2.address, 0)).to.equal(110);
           expect(await memeContract.balanceOf(nftOwner2.address, memeId)).to.equal(0);
+          // check new owner
+          const meme = await memeContract.getMeme(memeId);
+          expect(meme.owner).to.equal(nftOwner1.address);
         });
       });
   });

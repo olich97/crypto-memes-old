@@ -22,6 +22,7 @@ async function main() {
   console.log("CryptoMeme deployed to:", meme.address);
 
   // some fake data for tests
+  /*
   const memeHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("my beautiful meme content with text"));
   const memeId = ethers.BigNumber.from(memeHash);
   const accounts = await ethers.getSigners();
@@ -32,6 +33,7 @@ async function main() {
   const infos = await meme.connect(accounts[0]).getMemes();
   console.log('Meme created with info: ', info);
   console.log('Meme list: ', infos);
+  */
 }
 
 // We recommend this pattern to be able to use async/await everywhere
