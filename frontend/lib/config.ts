@@ -8,6 +8,6 @@ export default {
 
 export const imageStorageConfig = {
   PUBLIC_KEY: process.env.IMAGE_STORAGE_PUBLIC_KEY,
-  PRIVATE_KEY: process.env.IMAGE_STORAGE_PRIVATE_KEY,
   ENDPOINT: process.env.IMAGE_STORAGE_ENDPOINT,
+  SERVER_AUTH_URL: process.env.IMAGE_SERVER_AUTH_URL,
 };

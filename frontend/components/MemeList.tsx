@@ -1,34 +1,34 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getMemes } from '../lib/crypto-memes';
-//import useDebounce from '../lib/hooks/useDebounce';
+import { getMemes } from '../lib/cryptoMemeContract';
+import useDebounce from '../lib/hooks/useDebounce';
 import { Result } from '../lib/types/result';
 import Loader from './Loader';
 import MemeCard from './MemeCard';
 
 const MemeList = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [limit, setLimit] = useState(6);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [search, setSearch] = useState('');
+  const countPerPage = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState('');
   const [memes, setMemes] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [isError, setError] = useState(false);
-  //const debouncedValue = useDebounce(search, 500);
+  const debouncedValue = useDebounce(searchValue, 500);
 
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
   };
 
   const previousPage = () => {
-    if (currentPage > 0) setCurrentPage(currentPage - 1);
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
   const loadMemes = useCallback(async () => {
     setLoading(true);
     const response: Result = await getMemes();
-    setLoading(false);
     setError(response.isError);
     setMemes(response.data);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -38,7 +38,13 @@ const MemeList = (): JSX.Element => {
   if (isError) return <div>failed to load</div>;
   if (isLoading) return <Loader />;
 
-  //console.log(`search: ${debouncedValue}, skip: ${skip}, limit: ${limit}`);
+  // Simple Searching and pagination
+  const startIndex = currentPage * countPerPage - countPerPage;
+  const endIndex = startIndex + countPerPage;
+  //console.log(`search: ${debouncedValue}, skip: ${startIndex}, limit: ${endIndex}`);
+  const currentMemes = memes
+    .filter(item => item.text.toLowerCase().indexOf(debouncedValue) > -1)
+    .slice(startIndex, endIndex);
 
   return (
     <div>
@@ -63,19 +69,19 @@ const MemeList = (): JSX.Element => {
           name="Meme"
           autoFocus
           placeholder="Search memes .... "
-          value={search}
-          onChange={e => setSearch(e.target.value)}
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
           className="w-full py-2 border-b-2 outline-none text-black focus:border-black dark:focus:border-white dark:bg-black dark:text-white"
         />
       </div>
-      <div className="space-y-4 divide-y md:divide-y-4">
-        {memes?.map(meme => (
+      <div className="space-y-4 divide-y-2 ">
+        {currentMemes?.map(meme => (
           <MemeCard key={meme.id} meme={meme} />
         ))}
       </div>
 
       <nav aria-label="Page navigation" className="py-10">
-        {currentPage > 0 && (
+        {currentPage > 1 && (
           <button
             className="h-10 px-10 text-black dark:text-white transition-colors duration-150 border focus:shadow-outline hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
             onClick={previousPage}

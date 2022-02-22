@@ -1,12 +1,66 @@
 // https://docs.imagekit.io/api-reference/upload-file-api/client-side-file-upload#how-to-implement-authenticationendpoint-endpoint
 // https://docs.imagekit.io/api-reference/upload-file-api/client-side-file-upload#examples
 
-//import { imageStorageConfig } from "./config";
+import ImageKit from 'imagekit-javascript';
+import { UploadResponse } from 'imagekit-javascript/dist/src/interfaces';
+import { imageStorageConfig } from './config';
 import { Result } from './types/result';
+import { createClient } from '@supabase/supabase-js';
 
-export async function uploadImage(name: string, image: File): Promise<Result> {
-  return {
-    isError: true,
-    message: name + image.type,
-  };
+const supabase = createClient(
+  'https://neccieywpfixdlszropx.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lY2NpZXl3cGZpeGRsc3pyb3B4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0NTI4Mjk0OCwiZXhwIjoxOTYwODU4OTQ4fQ.CkEi9EZ-NrN6QuIMojRTGXOEApXGGasjn3ts9YQlhWw',
+);
+
+export async function uploadContent(content: File): Promise<Result> {
+  try {
+    const result = (await uploadToImageKit(content.name, content)) as UploadResponse;
+    return Result.ok('Content uploaded', result.url);
+  } catch (error) {
+    Result.fail(`Error: ${error.message}`);
+  }
+}
+
+export async function uploadJsonMetadata(id: string, text: string, contentUrl: string): Promise<Result> {
+  try {
+    const fileBody = Buffer.from(
+      JSON.stringify({
+        text: text,
+        content: contentUrl,
+      }),
+    );
+    const { data, error } = await supabase.storage.from('metadata').upload(`${id}.json`, fileBody, {
+      contentType: 'application/json',
+    });
+    if (error) {
+      return Result.fail(`Error: ${error.message}`);
+    }
+    return Result.ok('Content uploaded', data.Key);
+  } catch (err) {
+    Result.fail(`Error: ${err.message}`);
+  }
+}
+
+function uploadToImageKit(name: string, content: File) {
+  const imagekit = new ImageKit({
+    publicKey: imageStorageConfig.PUBLIC_KEY,
+    urlEndpoint: imageStorageConfig.ENDPOINT,
+    authenticationEndpoint: imageStorageConfig.SERVER_AUTH_URL,
+  });
+
+  return new Promise((resolve, reject) => {
+    imagekit.upload(
+      {
+        file: content,
+        fileName: name,
+        useUniqueFileName: true,
+      },
+      function (err, result) {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      },
+    );
+  });
 }

@@ -24,11 +24,14 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </header>
       <main>
         <div className="max-w-4xl px-8 py-4 mx-auto">{children}</div>
-        <div className="absolute bottom-10 right-24" style={{ right: '12%' }}>
+        <div className="fixed bottom-10" style={{ left: '5%', zIndex: 100 }}>
           <Wallet />
         </div>
       </main>
-      <footer className="py-8">
+      <footer className="max-w-4xl px-1 mx-auto py-3">
+        <div className="relative">
+          <div className="w-full border-t border-gray-300"></div>
+        </div>
         <div className="max-w-4xl px-8 mx-auto">
           Built by{' '}
           <a

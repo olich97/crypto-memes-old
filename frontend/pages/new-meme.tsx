@@ -1,38 +1,100 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Image from 'next/image';
-import { postMeme } from '../lib/memeService';
 import Loader from '../components/Loader';
 import Alert from '../components/Alert';
 import { AlertTypes } from '../lib/types/alert';
+import { uploadContent, uploadJsonMetadata } from '../lib/storage';
+import { createMeme, isUserEnabled, isWalletConnected } from '../lib/cryptoMemeContract';
+import { ethers } from 'ethers';
 
 export const NewMeme = (): JSX.Element => {
   const [selectedImage, setSelectedImage] = useState();
   const [memeText, setMemeText] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState('');
   const [uploadResult, setUploadResult] = useState({ isError: false, message: '', description: '' });
   const [showAlert, setShowAlert] = useState(false);
+  const [isAuthorizedUser, setUserAuthorization] = useState(false);
   // This function will be triggered when the file field change
   const imageChange = e => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedImage(e.target.files[0]);
     }
   };
+
+  const showError = (description: string) => {
+    setLoading(false);
+    setShowAlert(true);
+    setUploadResult({
+      isError: true,
+      message: 'Something went wrong!',
+      description: description,
+    });
+  };
+
+  const userAuthorization = async () => {
+    const userEnabled = await isUserEnabled();
+    const walletConnected = await isWalletConnected();
+
+    if (userEnabled.data && walletConnected.data) {
+      setUserAuthorization(true);
+    }
+  };
+  // Auto connect to the cached provider
+  useEffect(() => {
+    userAuthorization();
+  }, []);
+
   // This function is triggered on press Save button
   const submit = async () => {
-    if (memeText == '' || !selectedImage) {
+    userAuthorization();
+    if (memeText == '' || !selectedImage || !isAuthorizedUser) {
       setUploadResult({
         isError: true,
         message: 'Invalid data!',
-        description: 'Text and image fields should not be empty...',
+        description: 'Text and image fields should not be empty and you need to be registered in blockchain...',
       });
       setShowAlert(true);
       return;
     }
     setLoading(true);
-    const result = await postMeme(memeText, selectedImage);
+    const memeHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(memeText));
+    const memeId = ethers.BigNumber.from(memeHash).toString();
+    // Need to:
+    // 1. Verify Meme - > Generate hash and memeId for checking if meme was already create
+    //setLoadingStep('Verifying meme...');
+    //await delay(5000);
+    // 2. Upload image
+    setLoadingStep('Uploading content to the storage...');
+    const uploadRes = await uploadContent(selectedImage);
+    if (uploadRes.isError) {
+      showError(uploadRes.message);
+      return;
+    }
+    //const result = await postMeme(memeText, selectedImage);
+    // 3. Upload json metadata
+    setLoadingStep('Creating meme metadata...');
+    const metaRes = await uploadJsonMetadata(memeId, memeText, uploadRes.data);
+    if (metaRes.isError) {
+      showError(metaRes.message);
+      return;
+    }
+    // 4. Mint meme in blockchain -> in background
+    setLoadingStep('Creating a minting transaction on blockchain...');
+    const mintingResult = await createMeme(memeHash, 10, false);
+    if (mintingResult.isError) {
+      showError(mintingResult.message);
+      return;
+    }
+    // 5. Update database on confirmed transaction -> in background
+
+    setUploadResult({
+      isError: false,
+      message: 'Ok',
+      description: `Your request to create a meme NFT was submitted, see transaction: ${mintingResult.data}`,
+    });
     setLoading(false);
-    setUploadResult(result);
     setShowAlert(true);
   };
 
@@ -42,8 +104,22 @@ export const NewMeme = (): JSX.Element => {
         title: 'New Meme - Crypto Memes',
       }}
     >
-      {isLoading && <Loader />}
-      {!isLoading && (
+      {isLoading && (
+        <>
+          <Loader />
+          <span>{loadingStep}</span>
+        </>
+      )}
+      {!isAuthorizedUser && (
+        <>
+          <span>In order to create new memes on the blockchain you need: </span>
+          <ul>
+            <li>- Connected wallet</li>
+            <li>- Sign Up: confirmed sign up (registration) transaction</li>
+          </ul>
+        </>
+      )}
+      {!isLoading && isAuthorizedUser && (
         <div className="mt-5 md:mt-0 md:col-span-2">
           <form
             method="POST"

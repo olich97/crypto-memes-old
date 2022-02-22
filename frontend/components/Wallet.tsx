@@ -1,11 +1,12 @@
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { providers } from 'ethers';
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import WalletLink from 'walletlink';
 import Web3Modal from 'web3modal';
+import { isUserEnabled, signUp, getUserBalance, setCurrentAddress } from '../lib/cryptoMemeContract';
 import { ellipseAddress, getChainData } from '../lib/wallet/utilities';
 
-const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad';
+const INFURA_ID = '';
 
 const providerOptions = {
   walletconnect: {
@@ -84,6 +85,8 @@ const initialState: StateType = {
 function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case 'SET_WEB3_PROVIDER':
+      //console.log('Setting address', action.address)
+      setCurrentAddress(action.address);
       return {
         ...state,
         provider: action.provider,
@@ -102,6 +105,8 @@ function reducer(state: StateType, action: ActionType): StateType {
         chainId: action.chainId,
       };
     case 'RESET_WEB3_PROVIDER':
+      //console.log('ReSetting address')
+      setCurrentAddress(null);
       return initialState;
     default:
       throw new Error();
@@ -111,6 +116,7 @@ function reducer(state: StateType, action: ActionType): StateType {
 const Wallet = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { provider, web3Provider, address, chainId } = state;
+  const [balance, setBalance] = useState('');
 
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
@@ -126,7 +132,12 @@ const Wallet = (): JSX.Element => {
     const address = await signer.getAddress();
 
     const network = await web3Provider.getNetwork();
-
+    // check diretecty in the contract if user is registered
+    const isUserRegistered = await isUserEnabled();
+    if (!isUserRegistered.data) {
+      // let ask to confirm a signup transaction
+      await signUp();
+    }
     dispatch({
       type: 'SET_WEB3_PROVIDER',
       provider,
@@ -145,6 +156,7 @@ const Wallet = (): JSX.Element => {
       dispatch({
         type: 'RESET_WEB3_PROVIDER',
       });
+      window.location.reload();
     },
     [provider],
   );
@@ -198,6 +210,16 @@ const Wallet = (): JSX.Element => {
   // TODO: Handle unsuported chain with message
   const chainData = getChainData(chainId);
 
+  const getBalance = async () => {
+    const result = await getUserBalance();
+    setBalance(result.data);
+    //console.log('Balance')
+  };
+
+  useEffect(() => {
+    getBalance();
+  }, []);
+
   return (
     <main>
       {address && (
@@ -207,6 +229,9 @@ const Wallet = (): JSX.Element => {
           </div>
           <div>
             <p className="mb-1">Address: {ellipseAddress(address)}</p>
+          </div>
+          <div>
+            <p className="mb-1">Balance: {balance} MTC</p>
           </div>
         </div>
       )}

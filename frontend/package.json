@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@supabase/supabase-js": "^1.30.4",
     "@tailwindcss/typography": "^0.4.1",
     "@tailwindui/react": "^0.1.1",
     "@walletconnect/web3-provider": "^1.7.1",
@@ -35,6 +36,8 @@
     "ethers": "^5.5.4",
     "gray-matter": "^4.0.2",
     "imagekit": "^3.2.5",
+    "imagekit-javascript": "^1.4.3",
+    "imagekitio-react": "^1.1.0",
     "mdx-prism": "^0.3.3",
     "next": "^12.1.0",
     "next-mdx-remote": "^3.0.8",
