@@ -1,14 +1,15 @@
+import { Result } from '../types/result';
 import supportedChains from './chains';
 import { IChainData } from './types';
 
-export function getChainData(chainId?: number): IChainData {
+export function getChainData(chainId?: number): Result {
   if (!chainId) {
     return null;
   }
-  const chainData = supportedChains.filter((chain: any) => chain.chain_id === chainId)[0];
+  const chainData: IChainData = supportedChains.filter((chain: any) => chain.chain_id === chainId)[0];
 
   if (!chainData) {
-    throw new Error('ChainId missing or not supported');
+    return Result.fail('Selected chain is not supported!');
   }
   /*
   const API_KEY = '460f40a260564ac4a4f4b3fffb032dad';
@@ -22,7 +23,7 @@ export function getChainData(chainId?: number): IChainData {
     };
   }
   */
-  return chainData;
+  return Result.ok('Ok', chainData);
 }
 
 export function ellipseAddress(address = '', width = 10): string {

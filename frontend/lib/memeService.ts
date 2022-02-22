@@ -2,6 +2,8 @@ import useSWR from 'swr';
 import { MemeType } from './types/meme';
 import config from './config';
 
+/* NOT USED FOR NOW */
+
 export type MemeOutput = {
   memes?: MemeType[];
   meme?: MemeType;

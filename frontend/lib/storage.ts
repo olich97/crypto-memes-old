@@ -7,10 +7,7 @@ import { imageStorageConfig } from './config';
 import { Result } from './types/result';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  'https://neccieywpfixdlszropx.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lY2NpZXl3cGZpeGRsc3pyb3B4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0NTI4Mjk0OCwiZXhwIjoxOTYwODU4OTQ4fQ.CkEi9EZ-NrN6QuIMojRTGXOEApXGGasjn3ts9YQlhWw',
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SECRET);
 
 export async function uploadContent(content: File): Promise<Result> {
   try {

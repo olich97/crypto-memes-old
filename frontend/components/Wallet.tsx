@@ -4,7 +4,9 @@ import { useCallback, useEffect, useReducer, useState } from 'react';
 import WalletLink from 'walletlink';
 import Web3Modal from 'web3modal';
 import { isUserEnabled, signUp, getUserBalance, setCurrentAddress } from '../lib/cryptoMemeContract';
+import { AlertTypes } from '../lib/types/alert';
 import { ellipseAddress, getChainData } from '../lib/wallet/utilities';
+import Alert from './Alert';
 
 const INFURA_ID = '';
 
@@ -117,6 +119,7 @@ const Wallet = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { provider, web3Provider, address, chainId } = state;
   const [balance, setBalance] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   const connect = useCallback(async function () {
     // This is the initial `provider` that is returned when
@@ -132,12 +135,7 @@ const Wallet = (): JSX.Element => {
     const address = await signer.getAddress();
 
     const network = await web3Provider.getNetwork();
-    // check diretecty in the contract if user is registered
-    const isUserRegistered = await isUserEnabled();
-    if (!isUserRegistered.data) {
-      // let ask to confirm a signup transaction
-      await signUp();
-    }
+
     dispatch({
       type: 'SET_WEB3_PROVIDER',
       provider,
@@ -145,6 +143,19 @@ const Wallet = (): JSX.Element => {
       address,
       chainId: network.chainId,
     });
+  }, []);
+
+  const signUpUser = async () => {
+    // check directly in the contract if user is registered
+    const isUserRegistered = await isUserEnabled();
+    if (!isUserRegistered.data) {
+      // let ask to confirm a signup transaction
+      await signUp();
+    }
+  };
+
+  useEffect(() => {
+    signUpUser();
   }, []);
 
   const disconnect = useCallback(
@@ -207,8 +218,14 @@ const Wallet = (): JSX.Element => {
       };
     }
   }, [provider, disconnect]);
-  // TODO: Handle unsuported chain with message
+
   const chainData = getChainData(chainId);
+  useEffect(() => {
+    if (chainData?.isError) {
+      // set the message
+      setShowAlert(true);
+    }
+  }, [chainData]);
 
   const getBalance = async () => {
     const result = await getUserBalance();
@@ -225,7 +242,7 @@ const Wallet = (): JSX.Element => {
       {address && (
         <div className="grid">
           <div>
-            <p className="mb-1">Network: {chainData?.name}</p>
+            <p className="mb-1">Network: {chainData?.data?.name}</p>
           </div>
           <div>
             <p className="mb-1">Address: {ellipseAddress(address)}</p>
@@ -233,6 +250,16 @@ const Wallet = (): JSX.Element => {
           <div>
             <p className="mb-1">Balance: {balance} MTC</p>
           </div>
+          {chainData.isError && showAlert && chainData.message != '' && (
+            <div>
+              <Alert
+                type={AlertTypes.Error}
+                header={'Only Rinkeby test network supported, '}
+                message={chainData.message}
+                onClose={() => setShowAlert(false)}
+              />
+            </div>
+          )}
         </div>
       )}
       {web3Provider ? (

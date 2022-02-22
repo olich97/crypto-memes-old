@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { buyMeme, getMeme, setMemeSale } from '../../lib/cryptoMemeContract';
 import { ellipseAddress } from '../../lib/wallet/utilities';
 import { ethers } from 'ethers';
+import Alert from '../../components/Alert';
+import { AlertTypes } from '../../lib/types/alert';
 export function getServerSideProps(context: any) {
   return {
     props: { params: context.params },
@@ -18,6 +20,9 @@ const MemePage = ({ params }): JSX.Element => {
   const [isError, setError] = useState(false);
   const [isMemeOwner, setIsOwner] = useState(false);
   const [copySuccess, setCopySuccess] = useState('');
+  const [operationResult, setOperationResult] = useState({ isError: false, message: '', description: '' });
+  const [showAlert, setShowAlert] = useState(false);
+
   const { id } = params;
 
   const copyToClipBoard = async targetText => {
@@ -53,11 +58,27 @@ const MemePage = ({ params }): JSX.Element => {
   };
 
   const setMemeForSale = async (memeId: string, isForSale: boolean) => {
-    await setMemeSale(memeId, isForSale);
+    const result = await setMemeSale(memeId, isForSale);
+    if (result.isError) {
+      setOperationResult({
+        isError: result.isError,
+        message: 'Ops, ',
+        description: result.message,
+      });
+      setShowAlert(true);
+    }
   };
 
   const buy = async (memeId: string, price: number) => {
-    await buyMeme(memeId, price);
+    const result = await buyMeme(memeId, price);
+    if (result.isError) {
+      setOperationResult({
+        isError: result.isError,
+        message: 'Ops, ',
+        description: result.message,
+      });
+      setShowAlert(true);
+    }
   };
 
   const loadMeme = useCallback(async () => {
@@ -104,6 +125,16 @@ const MemePage = ({ params }): JSX.Element => {
               objectFit="contain"
             />
           </div>
+          {operationResult.isError && showAlert && operationResult.message != '' && (
+            <div>
+              <Alert
+                type={AlertTypes.Error}
+                header={operationResult.message}
+                message={operationResult.description}
+                onClose={() => setShowAlert(false)}
+              />
+            </div>
+          )}
           <div className="pb-3 text-center tracking-wide md:flex justify-around py-6">
             <div className="owner">
               <p className="text-sm uppercase">Owner</p>
