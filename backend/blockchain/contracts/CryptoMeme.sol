@@ -41,7 +41,7 @@ contract CryptoMeme is ERC1155, Ownable {
     /**
      * @dev List of memes in the platfrom
      */
-    MemeInfo[] public memes;
+    uint256[] public memeIds;
 
     /**
      * @dev Users addresses enabled to operate in the platform
@@ -101,7 +101,7 @@ contract CryptoMeme is ERC1155, Ownable {
     {
         require(price > 0, "Starting price should be greater than 0");
         require(!_hashExists[_hash], "Meme was already created");
-        require(memes.length <= MAX_MEMES_SUPPLY, "Maximum meme supply reached");
+        require(memeIds.length <= MAX_MEMES_SUPPLY, "Maximum meme supply reached");
 
         uint256 memeId = uint256(_hash);
         _mint(msg.sender, memeId, 1, '');
@@ -114,7 +114,7 @@ contract CryptoMeme is ERC1155, Ownable {
             isForSale: isForSale
         });     
         memeInfos[memeId] = meme;
-        memes.push(meme);
+        memeIds.push(memeId);
         // reward creator with Meme Coins        
         _mint(msg.sender, MEME_COIN, MEME_CREATION_REWARD, 'MEME_CREATION_REWARD');
 
@@ -177,7 +177,12 @@ contract CryptoMeme is ERC1155, Ownable {
         view
         returns(MemeInfo[] memory)
     {       
-        return memes;
+        MemeInfo[] memory result = new MemeInfo[](memeIds.length);
+        for (uint64 i = 0; i < memeIds.length; i++) 
+        {
+            result[i] = getMeme(memeIds[i]);
+        }
+        return result;
     }
 
      /**
@@ -185,7 +190,7 @@ contract CryptoMeme is ERC1155, Ownable {
      * @param memeId token id
      */
     function getMeme(uint memeId)
-        external
+        public
         view
         returns(MemeInfo memory)
     {
