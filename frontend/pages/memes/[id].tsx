@@ -3,9 +3,8 @@ import Layout from '../../components/Layout';
 import Loader from '../../components/Loader';
 import { MetaProps } from '../../lib/types/layout';
 import Image from 'next/image';
-import { buyMeme, getMeme, setMemeSale } from '../../lib/cryptoMemeContract';
+import { buyMeme, getCurrentAddress, getMeme, setMemeSale } from '../../lib/cryptoMemeContract';
 import { ellipseAddress } from '../../lib/wallet/utilities';
-import { ethers } from 'ethers';
 import Alert from '../../components/Alert';
 import { AlertTypes } from '../../lib/types/alert';
 export function getServerSideProps(context: any) {
@@ -39,21 +38,17 @@ const MemePage = ({ params }): JSX.Element => {
 
   const checkMemeOwner = async (): Promise<boolean> => {
     try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        if (address === meme.owner) {
-          setIsOwner(true);
-          return true;
-        }
+      const address = getCurrentAddress();
+      if (address === meme?.owner) {
+        setIsOwner(true);
+        return true;
       }
 
       setIsOwner(false);
       return false;
     } catch (err) {
-      //console.error("Something bad", err);
+      setIsOwner(false);
+      return false;
     }
   };
 

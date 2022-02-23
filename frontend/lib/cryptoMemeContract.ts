@@ -196,39 +196,32 @@ export async function setMemeSale(memeId: string, isForSale: boolean): Promise<R
 
 export async function getMemes(): Promise<Result> {
   try {
-    const { ethereum } = window;
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const constract = new ethers.Contract(config.CRYPTO_MEME_CONTRACT, CryptoMeme.abi, provider);
+    const memes = await constract.getMemes();
+    const result: MemeInfo[] = [];
 
-    if (ethereum && isConnectionValid()) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const nftContract = new ethers.Contract(config.CRYPTO_MEME_CONTRACT, CryptoMeme.abi, signer);
-      const memes = await nftContract.getMemes();
-      const result: MemeInfo[] = [];
+    await Promise.all(
+      memes.map(async item => {
+        const metadata = await (await fetch(config.METADATA_URL.replace('%Id%', item.id.toString()))).json();
 
-      await Promise.all(
-        memes.map(async item => {
-          const metadata = await (await fetch(config.METADATA_URL.replace('%Id%', item.id.toString()))).json();
+        result.push({
+          id: item.id.toString(),
+          owner: item.owner,
+          isForSale: item.isForSale,
+          price: item.price.toNumber(),
+          createdAt: new Date(item.createdAt * 1000),
+          text: metadata.text,
+          content: metadata.content,
+        });
+      }),
+    );
 
-          result.push({
-            id: item.id.toString(),
-            owner: item.owner,
-            isForSale: item.isForSale,
-            price: item.price.toNumber(),
-            createdAt: new Date(item.createdAt * 1000),
-            text: metadata.text,
-            content: metadata.content,
-          });
-        }),
-      );
+    result.sort((x, y) => {
+      return y.createdAt.valueOf() - x.createdAt.valueOf();
+    });
 
-      result.sort((x, y) => {
-        return y.createdAt.valueOf() - x.createdAt.valueOf();
-      });
-
-      return Result.ok('Ok', result);
-    } else {
-      return Result.fail('Ethereum object do not exist!');
-    }
+    return Result.ok('Ok', result);
   } catch (error) {
     return Result.fail('Problem with contract get meme');
   }
@@ -236,27 +229,20 @@ export async function getMemes(): Promise<Result> {
 
 export async function getMeme(memeId: string): Promise<Result> {
   try {
-    const { ethereum } = window;
+    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const constract = new ethers.Contract(config.CRYPTO_MEME_CONTRACT, CryptoMeme.abi, provider);
+    const meme = await constract.getMeme(memeId);
+    const metadata = await (await fetch(config.METADATA_URL.replace('%Id%', meme.id.toString()))).json();
 
-    if (ethereum && isConnectionValid()) {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const nftContract = new ethers.Contract(config.CRYPTO_MEME_CONTRACT, CryptoMeme.abi, signer);
-      const meme = await nftContract.getMeme(memeId);
-      const metadata = await (await fetch(config.METADATA_URL.replace('%Id%', meme.id.toString()))).json();
-
-      return Result.ok('Ok', {
-        id: meme.id.toString(),
-        owner: meme.owner,
-        isForSale: meme.isForSale,
-        price: meme.price.toNumber(),
-        createdAt: new Date(meme.createdAt * 1000),
-        text: metadata.text,
-        content: metadata.content,
-      });
-    } else {
-      return Result.fail('Ethereum object do not exist!');
-    }
+    return Result.ok('Ok', {
+      id: meme.id.toString(),
+      owner: meme.owner,
+      isForSale: meme.isForSale,
+      price: meme.price.toNumber(),
+      createdAt: new Date(meme.createdAt * 1000),
+      text: metadata.text,
+      content: metadata.content,
+    });
   } catch (error) {
     return Result.fail('Problem with contract get meme');
   }

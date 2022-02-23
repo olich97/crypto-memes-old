@@ -42,7 +42,7 @@ const supportedChains: IChainData[] = [
     network: 'rinkeby',
     chain_id: 4,
     network_id: 4,
-    rpc_url: 'https://eth-rinkeby.alchemyapi.io/v2/%API_KEY%',
+    rpc_url: process.env.RINKEBY_URL,
     native_currency: {
       symbol: 'ETH',
       name: 'Ethereum',

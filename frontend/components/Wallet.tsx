@@ -87,7 +87,6 @@ const initialState: StateType = {
 function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
     case 'SET_WEB3_PROVIDER':
-      //console.log('Setting address', action.address)
       setCurrentAddress(action.address);
       return {
         ...state,
@@ -145,17 +144,35 @@ const Wallet = (): JSX.Element => {
     });
   }, []);
 
+  // small functions in order to track if a signed up was already requested
+  const setIsSignUpRequested = (isRequested: boolean) => {
+    if (isRequested == true) {
+      window.localStorage.setItem('SignUpRequested', 'oh yes!');
+    } else {
+      window.localStorage.removeItem('SignUpRequested');
+    }
+  };
+
+  const isSignUpRequested = () => {
+    return window.localStorage.getItem('SignUpRequested') ?? false;
+  };
+
   const signUpUser = async () => {
     // check directly in the contract if user is registered
     const isUserRegistered = await isUserEnabled();
     if (!isUserRegistered.data) {
       // let ask to confirm a signup transaction
+      setIsSignUpRequested(true);
       await signUp();
+      // requested finished
+      setIsSignUpRequested(false);
     }
   };
 
   useEffect(() => {
-    signUpUser();
+    if (!isSignUpRequested()) {
+      signUpUser();
+    }
   }, []);
 
   const disconnect = useCallback(
@@ -191,6 +208,7 @@ const Wallet = (): JSX.Element => {
           type: 'SET_ADDRESS',
           address: accounts[0],
         });
+        window.location.reload();
       };
 
       // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes

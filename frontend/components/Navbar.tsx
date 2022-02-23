@@ -26,10 +26,10 @@ const navLinks = pages.map(page => (
 const Navbar = ({ menuOpen, setMenuOpen }) => (
   <div className="flex items-center justify-between p-4">
     <div className="flex items-center">
-      <ThemeSwitch />
-      <a href="/" className="text-xl font-bold no-underline dark:text-white text-black">
+      <a href="/" className="text-xl px-3 font-bold no-underline dark:text-white text-black">
         Crypto Memes
       </a>
+      <ThemeSwitch />
     </div>
     <nav className="hidden md:block space-x-6">{navLinks}</nav>
     <button

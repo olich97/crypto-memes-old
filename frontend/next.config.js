@@ -14,5 +14,6 @@ module.exports = {
     IMAGE_SERVER_AUTH_URL: process.env.IMAGE_SERVER_AUTH_URL,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_SECRET: process.env.SUPABASE_SECRET,
+    RPC_URL: process.env.RPC_URL,
   },
 };

@@ -14,6 +14,11 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
   return (
     <>
       <Head customMeta={customMeta} />
+      <div className="top-2 w-48 -left-12 mt-3 py-1 text-center -rotate-45 rounded-lg absolute z-30 bg-red-500 text-gray-100 text-xs md:text-sm font-medium md:block">
+        <a className="text-white" target="_blank" rel="noreferrer" href="https://rinkeby.etherscan.io/">
+          Rinkeby<br></br>Testnet
+        </a>
+      </div>
       <header>
         <div className="max-w-4xl px-1 mx-auto">
           <ResponsiveNavBar />
