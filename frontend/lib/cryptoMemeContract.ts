@@ -92,8 +92,8 @@ export async function getUserBalance(): Promise<Result> {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const contract = new ethers.Contract(config.CRYPTO_MEME_CONTRACT, CryptoMeme.abi, signer);
-      const balanceMtc = await contract.balanceOf(await signer.getAddress(), 0);
-      return Result.ok('Ok', balanceMtc.toNumber());
+      const balanceCmc = await contract.balanceOf(await signer.getAddress(), 0);
+      return Result.ok('Ok', balanceCmc.toNumber());
     } else {
       return Result.fail('Ethereum object do not exist!');
     }

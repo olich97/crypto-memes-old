@@ -100,7 +100,7 @@ const MemeCard = ({ meme }: { meme?: MemeInfo }): JSX.Element => {
             </div>
             <div className="price">
               <p className=" text-sm uppercase">Price</p>
-              <p className="text-lg font-semibold px-2">{meme.price} MTC</p>
+              <p className="text-lg font-semibold px-2">{meme.price} CMC</p>
             </div>
             <div className="created">
               <p className=" text-sm uppercase">Created At</p>

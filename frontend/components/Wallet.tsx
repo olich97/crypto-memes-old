@@ -266,7 +266,7 @@ const Wallet = (): JSX.Element => {
             <p className="mb-1">Address: {ellipseAddress(address)}</p>
           </div>
           <div>
-            <p className="mb-1">Balance: {balance} MTC</p>
+            <p className="mb-1">Balance: {balance} CMC</p>
           </div>
           {chainData.isError && showAlert && chainData.message != '' && (
             <div>

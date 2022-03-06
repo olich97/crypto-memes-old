@@ -1,11 +1,10 @@
-# Mementor UI
+# Crypto Memes UI
 
-This site is heavily inspired on starter template made by [Hunter Chang] (https://github.com/ChangoMan/nextjs-typescript-mdx-blog)
+This site is inspired on starter template made by [Hunter Chang](https://github.com/ChangoMan/nextjs-typescript-mdx-blog)
 
-A Next.js site. Built with:
+A Next.js site, built with:
 
 - [Typescript](https://www.typescriptlang.org/)
-- Write posts with [MDX](https://mdxjs.com/)
 - Style with [Tailwind CSS](https://tailwindcss.com/)
 - Linting with [ESLint](https://eslint.org/)
 - Formatting with [Prettier](https://prettier.io/)
@@ -13,7 +12,7 @@ A Next.js site. Built with:
 
 ## Getting Started
 
-1. Create a `.env` file from `.example-env`
+1. Create a `.env` file from `example.env`
 2. Install dependencies
 
 ```bash

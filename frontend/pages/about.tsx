@@ -29,7 +29,7 @@ export const About = (): JSX.Element => {
       <h2>Creating New Meme</h2>
       <p>
         Got to the "New Meme" page, insert meme text and choose your content (.gif or .png) then press "Save" and wait
-        until the magic happens. Users, who mint new memes are rewarded with 100 MTC token: a special coin used inside
+        until the magic happens. Users, who mint new memes are rewarded with 100 CMC token: a special coin used inside
         the platform (for buying memes).
       </p>
       <p>
