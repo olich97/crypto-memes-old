@@ -27,7 +27,7 @@ contract CryptoMeme is ERC1155, Ownable {
     uint256 public constant MEME_COIN = 0;
 
     // reward for creating a new meme in CryptoMeme Coin token (CMC)
-    uint256 public MEME_CREATION_REWARD = 100; // 1.00 MTC = 0.01 Eth
+    uint256 public MEME_CREATION_REWARD = 100; // 1.00 CMC = 0.01 Eth
 
     // max memes hosted by the platfrom, just in case to be sure
     uint64 public MAX_MEMES_SUPPLY = type(uint64).max;
@@ -136,7 +136,7 @@ contract CryptoMeme is ERC1155, Ownable {
         require(balanceOf(msg.sender, MEME_COIN) >= memeInfos[memeId].price, "Insufficient balance to buy meme");
         require(msg.value == memeInfos[memeId].price, "Incorrect meme price");
         // transfer meme coins to the seller
-        _safeTransferFrom(msg.sender, memeInfos[memeId].owner, MEME_COIN, msg.value, 'MTC_TRANSFER');
+        _safeTransferFrom(msg.sender, memeInfos[memeId].owner, MEME_COIN, msg.value, 'CMC_TRANSFER');
         // transfer meme nft to buyer
         _safeTransferFrom(memeInfos[memeId].owner, msg.sender, memeId, 1, 'MEME_TRANSFER');
         memeInfos[memeId].owner = msg.sender;

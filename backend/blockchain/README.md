@@ -1,17 +1,29 @@
-# Solidity and TypeScript with Hardhat
+# Crypto Memes Smart Contract
 
-Solidity Smart Contracts Development with Solidity and TypeScript using [Hardhat](https://hardhat.org/)
+A simple example of [ERC-1155](https://eips.ethereum.org/EIPS/eip-721) contract standard that handle a memes non fungible tokens together with fungible Crypto Meme Coin (CMC) tokens.
 
+Main purpose of smart contract are:
+- You can create new unique NFTs of memes and get reward for the creation in CMC tokens
+- You can set/unset your memes for sell
+- You can buy memes with CMC tokens
 # Getting Started
-```shell
-# clone the repository
-git clone https://github.com/olich97/solidity-hardhat-template.git
 
+```shell
 # installing dependencies
 npm install
 # or updating dependencies to the latest version
 npm update
 
+# start local chain
+npm run chain
+
+# deploy contracts on local chain
+npm run deploy:local
+
+```
+
+Other commands:
+```shell
 # clean artifacts
 npm run clean
 
@@ -24,12 +36,6 @@ npm run test
 # test coverage
 npm run coverage
 
-# start local chain
-npm run chain
-
-# deploy contracts on local chain
-npm run deploy:local
-
 # deploy contracts on live chain
 npm run deploy:rinkeby
 
@@ -40,18 +46,12 @@ npx hardhat verify "<CONTRACT ADDRESS>" --network rinkeby
 npm run lint
 npm run lint:fix
 ```
-## Syntax Highlighting
-If you use VSCode, you can enjoy syntax highlighting for your Solidity code via the vscode-solidity extension. The recommended approach to set the compiler version is to add the following fields to your VSCode user settings:
-```JSON
-{
-  "solidity.compileUsingRemoteVersion": "v0.8.4+commit.c7e474f2",
-  "solidity.defaultCompiler": "remote"
-}
 
-```
-Where of course v0.8.4+commit.c7e474f2 can be replaced with any other version.
-
-If you receiving errors on imports, a useful tip could be [this answer](https://ethereum.stackexchange.com/a/111572)
+## Patterns and libraries:
+- [Access Restriction](https://fravoll.github.io/solidity-patterns/access_restriction.html) with [Ownable by OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol)
+- [ERC-721](https://eips.ethereum.org/EIPS/eip-721) Token Standard with [Open Zeppelin ERC721](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol)
+- [Counters](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol) by Open Zeppelin
+- [SafeMath](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol) by Open Zeppelin
 
 # Tools and Resources
 - [MyCrypto](https://app.mycrypto.com/): tool for some common operations (contract interaction, [faucets](https://app.mycrypto.com/faucet))
