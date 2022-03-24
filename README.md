@@ -1,6 +1,8 @@
 # Crypto Memes
 
-A simple example of almost decentralized app. In order to be fully decentralized app meme contents and metadata should be stored in decentralized way.
+A simple example of almost decentralized app. 
+
+In order to be fully decentralized app meme contents and metadata should be stored in decentralized way and the app maybe should be deployed to decentralized infrastructure.
 
 In the [current version](https://cryptomemes.olich.me/) you can create, sell or buy a non-fungible tokens that uniquely represents memes (a text and a content). For buying memes platform uses a special fungible token called Crypto Meme Coin (CMC). For more information about usage visit: https://cryptomemes.olich.me/about.
 
