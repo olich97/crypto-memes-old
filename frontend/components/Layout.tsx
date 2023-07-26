@@ -3,6 +3,7 @@ import React from 'react';
 import { MetaProps } from '../lib/types/layout';
 import Head from './Head';
 import { ResponsiveNavBar } from './Navbar';
+import Wallet from './Wallet';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -28,6 +29,9 @@ const Layout = ({ children, customMeta }: LayoutProps): JSX.Element => {
       </header>
       <main>
         <div className="max-w-4xl px-8 py-4 mx-auto">{children}</div>
+        <div className="fixed bottom-10" style={{ left: '5%', zIndex: 100 }}>
+          <Wallet />
+        </div>
       </main>
       <footer className="max-w-4xl px-1 mx-auto py-3">
         <div className="relative">

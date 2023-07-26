@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ThemeSwitch from './ThemeSwitch';
 import Link from 'next/link';
-import Wallet from './Wallet';
 
 export const ResponsiveNavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,12 +32,6 @@ const Navbar = ({ menuOpen, setMenuOpen }) => (
       </a>
     </div>
     <nav className="hidden md:block space-x-6">{navLinks}</nav>
-    <div className="hidden md:block">
-      <Wallet />
-    </div>
-    <div className="md:hidden fixed bottom-10" style={{ left: '5%', zIndex: 100 }}>
-      <Wallet />
-    </div>
     <button
       type="button"
       aria-label="Toggle mobile menu"
