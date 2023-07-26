@@ -16,7 +16,7 @@ export const About = (): JSX.Element => {
         In order to use the app, please, make sure that:
         <ul>
           <li>
-            - You're connected with your wallet: press "Connect Wallet" button and chose one of your account on Rinkeby
+            - You're connected with your wallet: press "Connect Wallet" button and chose one of your account on Sepolia
             test network
           </li>
           <li>
@@ -37,8 +37,8 @@ export const About = (): JSX.Element => {
         is for sale and you are not the owner, you can buy the meme.
       </p>
       <p>
-        If you need to refill your wallet for rinkeby, you can use:{' '}
-        <a href="https://faucets.chain.link/rinkeby">Chainlink Faucet</a>
+        If you need to refill your wallet for sepolia, you can use:{' '}
+        <a href="https://faucets.chain.link/sepolia">Chainlink Faucet</a>
       </p>
       <h2>Used technologies</h2>
       <ul>
@@ -90,13 +90,13 @@ export const About = (): JSX.Element => {
         <li>
           -{' '}
           <a
-            href={`https://rinkeby.etherscan.io/address/${config.CRYPTO_MEME_CONTRACT}`}
+            href={`https://sepolia.etherscan.io/address/${config.CRYPTO_MEME_CONTRACT}`}
             target="_blank"
             rel="noreferrer"
           >
             Smart Contract
           </a>{' '}
-          deployed on Rinkeby testnet
+          deployed on Sepolia testnet
         </li>
       </ul>
       <br />

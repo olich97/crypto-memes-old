@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ThemeSwitch from './ThemeSwitch';
 import Link from 'next/link';
+import Wallet from './Wallet';
 
 export const ResponsiveNavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -26,12 +27,18 @@ const navLinks = pages.map(page => (
 const Navbar = ({ menuOpen, setMenuOpen }) => (
   <div className="flex items-center justify-between p-4">
     <div className="flex items-center">
+      <ThemeSwitch />
       <a href="/" className="text-xl px-3 font-bold no-underline dark:text-white text-black">
         Crypto Memes
       </a>
-      <ThemeSwitch />
     </div>
     <nav className="hidden md:block space-x-6">{navLinks}</nav>
+    <div className="hidden md:block">
+      <Wallet />
+    </div>
+    <div className="md:hidden fixed bottom-10" style={{ left: '5%', zIndex: 100 }}>
+      <Wallet />
+    </div>
     <button
       type="button"
       aria-label="Toggle mobile menu"

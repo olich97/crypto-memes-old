@@ -272,7 +272,7 @@ const Wallet = (): JSX.Element => {
             <div>
               <Alert
                 type={AlertTypes.Error}
-                header={'Only Rinkeby test network supported, '}
+                header={'Only Sepolia test network supported, '}
                 message={chainData.message}
                 onClose={() => setShowAlert(false)}
               />

@@ -36,13 +36,13 @@ const supportedChains: IChainData[] = [
   },
   */
   {
-    name: 'Ethereum Rinkeby',
-    short_name: 'rin',
+    name: 'Ethereum Sepolia',
+    short_name: 'sep',
     chain: 'ETH',
-    network: 'rinkeby',
-    chain_id: 4,
-    network_id: 4,
-    rpc_url: process.env.RINKEBY_URL,
+    network: 'sepolia',
+    chain_id: 11155111,
+    network_id: 11155111,
+    rpc_url: process.env.SEPOLIA_URL,
     native_currency: {
       symbol: 'ETH',
       name: 'Ethereum',
