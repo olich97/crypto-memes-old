@@ -37,10 +37,10 @@ npm run test
 npm run coverage
 
 # deploy contracts on live chain
-npm run deploy:rinkeby
+npm run deploy:sepolia
 
 # verify a contract
-npx hardhat verify "<CONTRACT ADDRESS>" --network rinkeby
+npx hardhat verify "<CONTRACT ADDRESS>" "BASE_METADATA_URL" --network sepolia
 
 # linting
 npm run lint
