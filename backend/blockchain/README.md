@@ -56,7 +56,7 @@ npm run lint:fix
 # Tools and Resources
 - [MyCrypto](https://app.mycrypto.com/): tool for some common operations (contract interaction, [faucets](https://app.mycrypto.com/faucet))
 - [Simple Unit Converter](https://eth-converter.com/)
-- [Rinkeby Faucet](https://faucets.chain.link/rinkeby)
+- [Sepolia Faucet](https://faucets.chain.link/sepolia)
 - [Alchemy](https://www.alchemy.com/)
 - [Pinata](https://www.pinata.cloud/)
 - Hardhat [documentation](https://hardhat.org/getting-started) and [tutorial](https://hardhat.org/tutorial/)
