@@ -42,6 +42,14 @@
       {
         "allow": ["warn", "error"]
       }
+    ],
+    "react/no-unknown-property": [
+      2,
+      {
+        "ignore": [
+          "jsx"
+        ]
+      }
     ]
   }
 }
